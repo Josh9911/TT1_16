@@ -10,5 +10,5 @@ MarkupSafe
 mongoengine
 pymongo
 six
-Werkzeug
+Werkzeug == 2.2.2
 WTForms==2.3.3
