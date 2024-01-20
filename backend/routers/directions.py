@@ -101,7 +101,7 @@ def editDest():
         cursor = mysql.connection.cursor()
         cursor.execute('''UPDATE destination 
                     SET cost = %s, name = %s, notes = %s 
-                    WHERE id = %s''', (request.json['cost'], request.json['name'], request.json['notes'], request.json['id'],))
+                    WHERE id = %s''', (request.json['cost'], request.json['location'], request.json['notes'], request.json['id'],))
         mysql.connection.commit()
         cursor.close()
         return "200"
