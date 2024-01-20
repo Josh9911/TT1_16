@@ -13,26 +13,26 @@ import {
     Box
 } from '@mui/material';
 
-const destinationsData = {
-    "Singapore": [
-        {
-            "name": "Singapore Zoo",
-            "cost": 1000,
-            "notes": "Singapore Zoo is a 28-hectare (69-acre) wildlife park and is home to over 300 species of mammals, birds, and reptiles. The zoo attracts about 1.7 million visitors each year."
-        },
-    ],
-    "Malaysia": [
-        {
-            "name": "Malaysia Zoo",
-            "cost": 800,
-            "notes": "Zoo Negara Malaysia is managed by the Malaysian Zoological Society, a non-governmental organization established to create the first local zoo for Malaysians."
-        },
-    ]
-}
-
 const Destinations = () => {
+    const destinationsData = {
+        "Singapore": [
+            {
+                "location": "Singapore Zoo",
+                "cost": 1000,
+                "notes": "Singapore Zoo is a 28-hectare (69-acre) wildlife park and is home to over 300 species of mammals, birds, and reptiles. The zoo attracts about 1.7 million visitors each year."
+            },
+        ],
+        "Malaysia": [
+            {
+                "location": "Malaysia Zoo",
+                "cost": 800,
+                "notes": "Zoo Negara Malaysia is managed by the Malaysian Zoological Society, a non-governmental organization established to create the first local zoo for Malaysians."
+            },
+        ]
+    }
     const [open, setOpen] = useState(false);
-    const [newDestination, setNewDestination] = useState({ location: '', cost: '', notes: '' });
+    const [destinations, setDestinations] =  useState(destinationsData);
+    const [newDestination, setNewDestination] = useState({ country: '', location: '', cost: '', notes: '' });
 
     const handleOpen = () => {
         setOpen(true);
@@ -48,6 +48,13 @@ const Destinations = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(`Adding new destination: ${JSON.stringify(newDestination)}`);
+        setDestinations(prevData => ({
+            ...prevData,
+            [newDestination.country]: [
+                ...(prevData[newDestination.country] || []),
+                { location: newDestination.location, cost: newDestination.cost, notes: newDestination.notes }
+            ]
+        }));
         handleClose();
     };
 
@@ -65,11 +72,11 @@ const Destinations = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {Object.entries(destinationsData).map(([country, destinations]) =>
+                        {Object.entries(destinations).map(([country, destinations]) =>
                             destinations.map((destination, index) => (
                                 <TableRow key={index}>
                                     {index === 0 && <TableCell rowSpan={destinations.length}>{country}</TableCell>}
-                                    <TableCell>{destination.name}</TableCell>
+                                    <TableCell>{destination.location}</TableCell>
                                     <TableCell>{destination.cost}</TableCell>
                                     <TableCell>{destination.notes}</TableCell>
                                     <TableCell style={{ "display": "flex" }}>
@@ -101,6 +108,15 @@ const Destinations = () => {
                     p: 4,
                 }}>
                     <form onSubmit={handleSubmit}>
+                        <TextField
+                            name="country"
+                            label="Country"
+                            value={newDestination.country}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            margin='normal'
+                        />
                         <TextField
                             name="location"
                             label="Destination"
