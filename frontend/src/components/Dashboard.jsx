@@ -33,20 +33,25 @@ const Dashboard = () => {
     const editItinerary = (val) => {
         id = val;
         console.log(val);
-        navigate('/destinations');
+        // navigate('/');
     }
 
     const removeItinerary = (val) => {
         //obtain Itinerary ID
         id = val;
         console.log(val);
+
+    }
+
+    const handleCreate = () => {
+        navigate('/createiti');
     }
 
     return (
         <div>
             <h2>My Itineraries</h2>
             <h4 >Dashboard</h4>
-            <Button variant="contained">Create</Button>
+            <Button variant="contained" onClick={handleCreate}>Create</Button>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500 }} aria-label="simple table">
                     <TableHead>
