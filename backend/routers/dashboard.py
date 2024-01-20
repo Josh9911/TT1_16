@@ -17,12 +17,6 @@ def dashboard():
     cursor = mysql.connect.cursor()
     cursor.execute(''' SELECT * from itinerary ''')
     itineraries = cursor.fetchall()
-    # cursor.execute(''' SELECT * from country ''')
-    # countries = cursor.fetchall()
-    # cursor.execute(''' SELECT * from itinerary_destination ''')
-    # itinerary_destinations = cursor.fetchall()
-    # cursor.execute(''' SELECT * from destination ''')
-    # destinations = cursor.fetchall()
 
     user_itineraries = []
 
@@ -58,6 +52,7 @@ def dashboard():
     # create responses
     for itinerary in user_itineraries:
         response = {}
+        response['itinerary_id'] = itinerary[0]
         response['itinerary_title'] = itinerary[4]
         response['budget'] = itinerary[3]
         response['country'] = get_country(itinerary[1])
