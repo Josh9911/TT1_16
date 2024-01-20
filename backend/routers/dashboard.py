@@ -10,10 +10,10 @@ app.config['MYSQL_DB'] = 'techtrek24'
 
 mysql = MySQL(app)
 
-@app.route("/dashboard")
+# @app.route("/dashboard")
 @app.route("/dashboard", methods = ['POST'])
 def dashboard():
-    user_id = request.get_data("user_id")
+    user_id = request.get_data('user_id')
     cursor = mysql.connect.cursor()
     cursor.execute( "SELECT * from itinerary" )
     itineraries = cursor.fetchall()
@@ -24,7 +24,10 @@ def dashboard():
     for row in itineraries:
         if row[2] == user_id:
             user_itineraries.append(row)
+    if not user_itineraries:
+        return {"Error": "No itineraries under user id"}
 
+    # define functions to get country and destination names from database
     def get_country(country_id):
         cursor.execute("SELECT name from country WHERE id = (%s)", (str(country_id)))
         country = cursor.fetchall()
@@ -46,9 +49,10 @@ def dashboard():
 
         return destinations
 
+    # create responses
     # response = {'itinerary_id': 0, 'itinerary_title': '', 'budget':0, 'country': '', 'destinations': ''}
     response_list = []
-    # create responses
+    
     for itinerary in user_itineraries:
         response = {}
         response['itinerary_id'] = itinerary[0]
