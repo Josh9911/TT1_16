@@ -3,7 +3,7 @@ import './App.css'
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard.jsx"
-
+import Login from "./components/LoginPage.jsx"
 
 function App() {
 
@@ -11,7 +11,9 @@ function App() {
     <>
         <BrowserRouter>
             <Routes>
-                <Route path='/home' element={<Dashboard />}/>
+                <Route path='/home'  element={<Dashboard />}/>
+                <Route path='/login' element={<Login />}/>
+                
             </Routes>
         </BrowserRouter>
     </>

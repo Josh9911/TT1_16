@@ -15,10 +15,24 @@ const Login = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
-      ...prevformData,
+      ...prevFormData,
       [name]: value,
     }));
   };
+
+  function showDashboard() {
+    //display dashboard
+    document.getElementById('login-container').style.display = 'none';
+    document.getElementById('dashboard-container').style.display = 'block';
+
+    //simulation
+    user = [
+        { username: johndoe, password: johndoe123  },
+        { username: emilysmith, password: emilysmith456},
+    ];
+
+    displayuser();
+}
 
   //form submission
   const handleSubmit = (e) => {
@@ -44,6 +58,17 @@ const Login = () => {
         </label>
         <br />
 
+        {/* User Name Input */}
+        <label>
+          username:
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
 
         {/* First Name */}
         <label>
