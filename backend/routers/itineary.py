@@ -30,9 +30,9 @@ def index():
         return jsonify({'error': str(e)})
 
 
-# Customer create a new itineary 
-@app.post("/new_itineary", methods = ["POST"]) 
-def create_itineary():
+# Customer create a new itinerary 
+@app.post("/new_itinerary", methods = ["POST"]) 
+def create_itinerary():
     try:
         data = request.get_json()
         #using datetime to generate unique id
@@ -60,7 +60,7 @@ def create_itineary():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-# Customer updates the itineary
+# Customer updates the itinerary
 
 @app.route('edit_itinerary', methods=['POST'])
 def edit_itinerary():
