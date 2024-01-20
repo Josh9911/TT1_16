@@ -60,8 +60,10 @@ const ItineraryForm = ({id}) => {
 
     const submitFunc = () => {
         var tempDest = selectedDest;
+        var response;
+
         if(id === undefined) {
-            var response = {
+            response = {
                 country_id: country,
                 user_id: 123,
                 budget: budget,
@@ -70,7 +72,7 @@ const ItineraryForm = ({id}) => {
             }
         }
         else {
-            var response = {
+            response = {
                 itinerary_id: id,
                 country_id: country,
                 user_id: 123,
@@ -80,9 +82,26 @@ const ItineraryForm = ({id}) => {
             }
         }
 
-        console.log(response);
+        postFunc(response);
     }
     
+    const postFunc = (data) => {
+        var link;
+        if(id === undefined) {
+            link = "http://localhost:5000/test";
+        }
+        else {
+            link = "http://localhost:5000/test"
+        }
+
+        axios.post(link, {data})
+        .then(response => {
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
     return (
         <div className='container'>
             <form id='itiForm'>
