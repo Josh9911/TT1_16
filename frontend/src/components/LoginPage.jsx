@@ -6,8 +6,8 @@ const Login = () => {
     userID: '',
     first_name: '',
     last_name: '',
-    password: '',
     username: '',
+    password: '',
   });
 
 
@@ -32,44 +32,18 @@ const Login = () => {
       <h2>Login Page</h2>
       {/* Login Form */}
       <form onSubmit={handleSubmit}>
-        {/* User ID Input */}
-        <label>
-          userID:
-          <input
-            type="text"
-            name="userID"
-            value={formData.userID}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
 
-
-        {/* First Name */}
+        {/* User Name */}
         <label>
-            first_name:
+            Username:
             <input
                 type="text"
-                name="first_name"
-                value={formData.first_name}
-                onChange={handleChange}
-                />
-        </label>
-        <br />
-
-
-        {/* Last Name */}
-        <label>
-            last_name:
-            <input
-                type="text"
-                name="last_name"
-                value={formData.last_name}
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 />
         </label>
         <br/>
-
 
         {/* Password Input */}
         <label>
@@ -82,7 +56,6 @@ const Login = () => {
           />
         </label>
         <br />
-
 
         {/* Submit Button */}
         <button type="submit">Login</button>
