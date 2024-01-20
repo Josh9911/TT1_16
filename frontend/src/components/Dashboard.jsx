@@ -7,6 +7,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import {useNavigate} from "react-router-dom";
+
 const Dashboard = () => {
 
     const data = [
@@ -14,8 +16,9 @@ const Dashboard = () => {
         { itineraryTitle: "Title1", budget: 500, country: "Singapore", listOfDestinations: "a,b" },
     ]
 
+    let navigate = useNavigate();
     const editItinerary = () => {
-      console.log('test')
+        navigate('/destinations');
     }
 
     const removeItinerary = () => {
@@ -47,8 +50,8 @@ const Dashboard = () => {
                                     <TableCell>{val.budget}</TableCell>
                                     <TableCell>{val.country}</TableCell>
                                     <TableCell>{val.listOfDestinations}</TableCell>
-                                    <TableCell><button variant="contained" onClick={editItinerary}>Edit</button></TableCell>
-                                    <TableCell><button variant="contained" onClick={removeItinerary}>Delete</button></TableCell>
+                                    <TableCell><Button variant="contained" onClick={editItinerary}>Edit</Button></TableCell>
+                                    <TableCell><Button variant="contained" onClick={removeItinerary}>Delete</Button></TableCell>
                                 </TableRow>
                             )
                         })}
