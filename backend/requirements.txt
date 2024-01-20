@@ -2,6 +2,7 @@ click
 Flask == 2.2.2
 Flask-Login
 flask-mongoengine
+flask_mysqldb
 Flask-WTF
 itsdangerous
 Jinja2
