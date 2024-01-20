@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, render_template
 from flask_mysqldb import MySQL
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -29,16 +30,28 @@ def index():
         return jsonify({'error': str(e)})
 
 
-# Customer create a new itineary 
-@app.post("/new_itineary", methods = ["POST"]) 
-def create_itineary():
+# Customer create a new itinerary 
+@app.post("/new_itinerary", methods = ["POST"]) 
+def create_itinerary():
     try:
         data = request.get_json()
+        #using datetime to generate unique id
+        unique_id = datetime.now().strftime("%Y%m%d%H%M%S%f")[:-3]
 
         cursor = mysql.connection.cursor()
+
+        # Statement to update itinerary table
         cursor.execute(
             "INSERT INTO itinerary (id, country_id, user_id, budget, title) VALUES (%s, %s, %s, %s, %s)",
-            (data['id'], data['country_id'], data['user_id'], data['budget'], data['title'])
+            (unique_id, data['country_id'], data['user_id'], data['budget'], data['title'])
+        )
+
+        # Statement to update itinerary-destination table 
+        for i in len(data['destinations']):
+            cursor.execute (
+                "INSERT INTO itinerary_destination(id, destination_id, itinearary_id VALUES (%s, %s , %s)",
+                (f"{unique_id}_{i}", data['destinations'][i], data['itinerary_id'])
+            
         )
         mysql.connection.commit()
         cursor.close()
@@ -47,4 +60,79 @@ def create_itineary():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-# Customer updates the itineary
+# Customer updates the itinerary
+
+@app.route('edit_itinerary', methods=['POST'])
+def edit_itinerary():
+    try:
+        # Update itinerary data
+        data = request.get_json()
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            UPDATE itinerary
+            SET country_id = %s, budget = %s, title = %s
+            WHERE id = %s AND user_id = %s
+        """, (data['country_id'], data['budget'], data['title'], data["id"], data['user_id']))
+
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({'message': 'Itinerary updated successfully'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    
+# Customer edits destination which requires updates to both the itinerary and itinerary_destination tables.
+@app.route('edit_itinerary_destination', methods = ['POST'])
+def edit_itinerary_destination():
+    try:
+        #update itinerary_destination
+        data =  request.get_json()
+        cursor = mysql.connection.cursor()
+        unique_id = datetime.now().strftime("%Y%m%d%H%M%S%f")[:-3]
+
+        #delete all records wrt to the itinerary
+        cursor.execute ("""
+                DELETE FROM itinerary_destination WHERE itinearary_id = %s
+                        """, (data['itinerary_id']))
+        
+        #re-insert record 
+        for i in len(data['destinations']):
+            cursor.execute (
+                "INSERT INTO itinerary_destination(id, destination_id, itinearary_id VALUES (%s, %s , %s)",
+                (f"{unique_id}_{i}", data['destinations'][i], data['itinerary_id'])
+            )
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({'message': 'Itinerary updated successfully'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+
+# To delete itinerary
+@app.route('delete_itinerary', methods = ['POST'])
+def edit_itinerary_destination():
+    try:
+        #update itinerary_destination
+        data =  request.get_json()
+        cursor = mysql.connection.cursor()
+
+
+        #delete all records wrt to the itinerary table
+        cursor.execute ("""
+                DELETE FROM itinerary WHERE id = %s
+                        """, (data['itinerary_id']))
+        #delete all record wrt to the itinerary_destination table 
+        cursor.execute ("""
+                DELETE FROM itinerary_destination WHERE itinearary_id = %s
+                        """, (data['itinerary_id']))
+        
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({'message': 'Itinerary updated successfully'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
