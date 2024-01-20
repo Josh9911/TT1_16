@@ -29,6 +29,7 @@ app.config["MYSQL_USER"] = MYSQL_USER
 app.config["MYSQL_PASSWORD"] = MYSQL_PASSWORD
 app.config["MYSQL_HOST"] = MYSQL_HOST
 app.config["MYSQL_DB"] = MYSQL_DB
+app.config["SECRET_KEY"] = JWT_SECRETKEY
 
 mysql = MySQL(app)
 
@@ -36,20 +37,32 @@ mysql = MySQL(app)
 ########### JWT Authentication ############
 # TODO: Implement JWT Authentication function
 
+# decorator for verifying the JWT
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         print(request.args)
-        token = request.args.get('token')  # http://127.0.0.1:500/route?token=
+        token = request.headers['token'] # Token sent in the header/ could also put it in args
         print(token)
         if not token:
-            return jsonify({'message': 'token is missing'}), 403
+            return jsonify({'message': 'token is missing'}), 401
 
         try:
-            data = jwt.decode(token, app.config['SECRETY_KEY'], algorithms=["HS256"])
+            # decoding the payload to fetch the stored details
+            data = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+            public_id = data['id']
             print('data: {}'.format(data))
+            myCursor = mysql.connection.cursor()
+
+            query = "SELECT id FROM user WHERE id = %s"
+            values = (public_id)
+
+            # Executing Query and storing return value of query into myCursor
+            myCursor.execute(query, values)
+
+            currUserID = myCursor.fetchall()
         except:
-            return jsonify({'message': 'Token is invalid'}), 403
+            return jsonify({'message': 'Token is invalid'}), 4  01
 
         return f(*args, **kwargs)
 
@@ -69,8 +82,8 @@ def token_required(f):
 def login_user():
     login_data = request.json
     try:
-        loginUsername = login_data['Username']
-        loginPassword = login_data['Password']
+        loginUsername = login_data['username']
+        loginPassword = login_data['password']
 
         # Initialise Cursor for MySQL Database, allows us to execute mySQL commands in a database session
         myCursor = mysql.connection.cursor()
@@ -95,16 +108,22 @@ def login_user():
         myCursor.close()
 
         loginContent = {"id": loginJsonResult}
+        print("login function done:", loginContent)
 
         if not userID:
             print("No User found")
             return "No User Found", 401
         else:
-
             expiration_time = datetime.now() + timedelta(hours=36)
             loginContent.update({"exp": expiration_time})
-            token = jwt.encode(loginContent, JWT_SECRETKEY, algorithm="HS256")
-            return jsonify({"id": loginJsonResult, 'token': token, }), 200
+            print("login function update:", loginContent)
+
+            token = jwt.encode(loginContent, app.config["SECRET_KEY"], algorithm="HS256")
+            print("token:", token)
+            print(jsonify({"id": loginJsonResult, 'token': token}))
+            return jsonify({"id": loginJsonResult, 'token': token}), 200
+
+        # Frontend side could be response.accessToken.token instead to get token
 
     except Exception as e:
         return str(e), 500
