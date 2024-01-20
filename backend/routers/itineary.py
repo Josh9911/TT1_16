@@ -19,8 +19,6 @@ mysql = MySQL(app)
 def index():
     try:   
         data = request.get_json()
-
-
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM itinerary WHERE user_id = %s", data['id'])
         data = cur.fetchall()
@@ -86,7 +84,7 @@ def edit_itinerary():
 @app.route('edit_itinerary_destination', methods = ['POST'])
 def edit_itinerary_destination():
     try:
-        #update itinerary_destination
+        
         data =  request.get_json()
         cursor = mysql.connection.cursor()
         unique_id = datetime.now().strftime("%Y%m%d%H%M%S%f")[:-3]
@@ -96,12 +94,20 @@ def edit_itinerary_destination():
                 DELETE FROM itinerary_destination WHERE itinearary_id = %s
                         """, (data['itinerary_id']))
         
-        #re-insert record 
+        #update record in itinerary
+        cursor.execute("""
+            UPDATE itinerary
+            SET country_id = %s, budget = %s, title = %s
+            WHERE id = %s AND user_id = %s
+        """, (data['country_id'], data['budget'], data['title'], data["id"], data['user_id']))
+        
+        #re-insert record into itinerary_destination
         for i in len(data['destinations']):
             cursor.execute (
                 "INSERT INTO itinerary_destination(id, destination_id, itinearary_id VALUES (%s, %s , %s)",
                 (f"{unique_id}_{i}", data['destinations'][i], data['itinerary_id'])
             )
+        
         mysql.connection.commit()
         cursor.close()
 
