@@ -30,20 +30,29 @@ const Dashboard = () => {
 
     let navigate = useNavigate();
     let id= 0;
+    // const history = useHistory();
     const editItinerary = (val) => {
         id = val;
         console.log(val);
-        // navigate('/');
+        // history.push('/edititi', { id });
+        document.cookie = "id=" + id;
+        console.log('cookie', document.cookie)
+        navigate('/edititi');
     }
 
     const removeItinerary = (val) => {
         //obtain Itinerary ID
         id = val;
+        document.cookie = "id=" + id;
+        console.log('cookie', document.cookie)
         console.log(val);
 
     }
 
+
     const handleCreate = () => {
+        document.cookie = "id=" + 0;
+        console.log('cookie', document.cookie)
         navigate('/createiti');
     }
 

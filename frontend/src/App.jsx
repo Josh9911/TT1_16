@@ -19,6 +19,7 @@ function App() {
                 <Route path='/login' element={<Login />}/>
                 <Route path='/home' element={<Dashboard />}/>
                 <Route path='/createiti' element={<ItineraryForm/>}/>
+                <Route path='/edititi' element={<ItineraryForm/>}/>
             </Routes>
         </BrowserRouter>
     </>

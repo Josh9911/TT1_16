@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-const ItineraryForm = ({id}) => {
-    const create = true;
+const ItineraryForm = () => {
+    const id = Number(document.cookie.replace("id=",""))
     const [destinations, setDestinations] = useState([]);
     const [selectedDest, setSelectedDest] = useState([]);
     const [title, setTitle] = useState();
@@ -62,7 +62,7 @@ const ItineraryForm = ({id}) => {
         var tempDest = selectedDest;
         var response;
 
-        if(id === undefined) {
+        if(id === 0) {
             response = {
                 country_id: country,
                 user_id: 123,
@@ -87,7 +87,7 @@ const ItineraryForm = ({id}) => {
     
     const postFunc = (data) => {
         var link;
-        if(id === undefined) {
+        if(id === 0) {
             link = "http://localhost:5000/test";
         }
         else {
@@ -106,7 +106,7 @@ const ItineraryForm = ({id}) => {
         <div className='container'>
             <form id='itiForm'>
                 <div className='row'>
-                    <div className='col'>{create ? "Create itinerary" : "Edit itinerary"}</div>
+                    <div className='col'>{id === 0 ? "Create itinerary" : "Edit itinerary"}</div>
                 </div>
                 <div className='row'>
                     <div className='row mb-3'>
