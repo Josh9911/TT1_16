@@ -10,14 +10,6 @@ app.config['MYSQL_DB'] = 'techtrek24'
 
 mysql = MySQL(app)
 
-# mydb = mysql.connector.connect(
-#         host="localhost",
-#         user="root",
-#         password="oReo*rUffles+100599"
-#         )
-
-# dashboard = Blueprint('dashboard', __name__)
-
 @app.route("/dashboard")
 # @app.route("/dashboard", methods = ['POST'])
 def dashboard():
