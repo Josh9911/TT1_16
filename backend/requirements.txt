@@ -1,0 +1,16 @@
+click
+Flask == 2.2.2
+Flask-Login
+flask-mongoengine
+flask_mysqldb
+Flask-WTF
+itsdangerous
+Jinja2
+MarkupSafe
+mongoengine
+pymongo
+six
+Werkzeug
+WTForms==2.3.3
+fastapi 
+flask_mysqldb
