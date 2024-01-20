@@ -17,6 +17,7 @@ const Destinations = () => {
     const destinationsData = {
         "Singapore": [
             {
+                "id": 1,
                 "location": "Singapore Zoo",
                 "cost": 1000,
                 "notes": "Singapore Zoo is a 28-hectare (69-acre) wildlife park and is home to over 300 species of mammals, birds, and reptiles. The zoo attracts about 1.7 million visitors each year."
@@ -24,6 +25,7 @@ const Destinations = () => {
         ],
         "Malaysia": [
             {
+                "id": 2,
                 "location": "Malaysia Zoo",
                 "cost": 800,
                 "notes": "Zoo Negara Malaysia is managed by the Malaysian Zoological Society, a non-governmental organization established to create the first local zoo for Malaysians."
@@ -31,7 +33,7 @@ const Destinations = () => {
         ]
     }
     const [open, setOpen] = useState(false);
-    const [destinations, setDestinations] =  useState(destinationsData);
+    const [destinations, setDestinations] = useState(destinationsData);
     const [newDestination, setNewDestination] = useState({ country: '', location: '', cost: '', notes: '' });
 
     const handleOpen = () => {
@@ -58,6 +60,20 @@ const Destinations = () => {
         handleClose();
     };
 
+    const handleDelete = (id) => {
+        console.log('Deleting destination with id: ' + id)
+        setDestinations(prevData => {
+            let newData = { ...prevData };
+            for (let country in newData) {
+                newData[country] = newData[country].filter(destination => destination.id !== id);
+                if (newData[country].length === 0) {
+                    delete newData[country];
+                }
+            }
+            return newData;
+        });
+    };
+
     return (
         <>
             <TableContainer component={Paper}>
@@ -74,7 +90,7 @@ const Destinations = () => {
                     <TableBody>
                         {Object.entries(destinations).map(([country, destinations]) =>
                             destinations.map((destination, index) => (
-                                <TableRow key={index}>
+                                <TableRow key={destination.id}>
                                     {index === 0 && <TableCell rowSpan={destinations.length}>{country}</TableCell>}
                                     <TableCell>{destination.location}</TableCell>
                                     <TableCell>{destination.cost}</TableCell>
@@ -83,7 +99,7 @@ const Destinations = () => {
                                         <Button variant='contained' style={{ "marginRight": "2px" }}>
                                             Update
                                         </Button>
-                                        <Button variant='contained' color='error'>
+                                        <Button variant='contained' color='error' onClick={() => handleDelete(destination.id)}>
                                             Delete
                                         </Button>
                                     </TableCell>
