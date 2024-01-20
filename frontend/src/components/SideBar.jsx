@@ -10,17 +10,15 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 // import ListItemButton from '@mui/material/ListItemButton';
 // import { useNavigate } from "react-router-dom";
-// import ListItemIcon from '@mui/material/ListItemIcon';
-// import ListItemText from '@mui/material/ListItemText';
 
 const drawerWidth = 240;
 
 export default function SideBar() {
     // const navigate = useNavigate();
     // const handleRouteToItineraries = () =>{
-    //     // navigate("/home");
+    //     navigate("../home");
     // }
-    //
+
     // const handleRouteToDestinations = () =>{
     //     // navigate('/home');
     // }
@@ -54,13 +52,15 @@ export default function SideBar() {
                 <Toolbar />
                 <Divider />
                 <List>
-                    <ListItem>Itineraries</ListItem>
-                    <ListItem>Destinations</ListItem>
-                    {/*<button onClick={handleRouteToItineraries}>Itineraries</button>*/}
-                    {/*<button onClick={handleRouteToDestinations}>Destinations</button>*/}
-                </List>
-                <Divider />
-            </Drawer>
-        </Box>
-    );
+                    <ListItem>Itineraries
+                </ListItem>
+                <ListItem>Destinations</ListItem>
+                {/*<button onClick={handleRouteToItineraries}>Itineraries</button>*/}
+                {/*<button onClick={handleRouteToDestinations}>Destinations</button>*/}
+            </List>
+            <Divider/>
+        </Drawer>
+</Box>
+)
+    ;
 }

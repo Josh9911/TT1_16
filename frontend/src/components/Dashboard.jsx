@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 const Dashboard = () => {
 
     const data = [
@@ -25,6 +26,7 @@ const Dashboard = () => {
         <div>
             <h2>My Itineraries</h2>
             <h4 >Dashboard</h4>
+            <Button variant="contained">Create</Button>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -45,8 +47,8 @@ const Dashboard = () => {
                                     <TableCell>{val.budget}</TableCell>
                                     <TableCell>{val.country}</TableCell>
                                     <TableCell>{val.listOfDestinations}</TableCell>
-                                    <TableCell><button onClick={editItinerary}>Edit</button></TableCell>
-                                    <TableCell><button onClick={removeItinerary}>Delete</button></TableCell>
+                                    <TableCell><button variant="contained" onClick={editItinerary}>Edit</button></TableCell>
+                                    <TableCell><button variant="contained" onClick={removeItinerary}>Delete</button></TableCell>
                                 </TableRow>
                             )
                         })}
