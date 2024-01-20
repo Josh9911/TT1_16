@@ -24,7 +24,7 @@ const Dashboard = () => {
     return (
         <div>
             <h2>My Itineraries</h2>
-            <h4>Dashboard</h4>
+            <h4 >Dashboard</h4>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
