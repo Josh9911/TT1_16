@@ -1,43 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel Web Application</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div id="login-container">
-        <h2>Login</h2>
-        <form id="login-form">
-            <!-- <label for="userID">User ID :</label>
-            <input type="text" id="userID" required> -->
-            <label for="username">Username:</label>
-            <input type="text" id="username">
-            <!-- <label for="first_name">first_name:</label>
-            <input type="text" id="first_name">
-            <label for="last_name">last_name:</label>
-            <input type="text" id="last_name"> -->
-            <label for="password">Password:</label>
-            <input type="password" id="password" required>
-            <button type="button" onclick="login()">Login</button>
-        </form>
-    </div>
-
-    <div id="dashboard-container" style="display: none;">
-        <h2>Dashboard</h2>
-        <!-- Display itinerary here -->
-    </div>
-
-    <!-- Other pages -->
-
-    <script type="text/javascript">
-      function login() {
-        if (loginSuccessful) {
-          window.location.replace = "/login";
-        }
-      }
-    </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
-
