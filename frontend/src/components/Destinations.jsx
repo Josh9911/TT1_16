@@ -68,7 +68,7 @@ const Destinations = () => {
                 { location: newDestination.location, cost: newDestination.cost, notes: newDestination.notes }
             ]
         }));
-        axios.post('http://localhost:5000/postDest', JSON.stringify(newDestination))
+        axios.post('http://localhost:5000/postDest', newDestination)
         handleClose();
     };
 
