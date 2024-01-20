@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Replace 'user', 'password', 'host', 'database' with your MySQL connection details
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'popcorn2'
+app.config['MYSQL_PASSWORD'] = 'password'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_DB'] = 'techtrek24'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -29,7 +29,7 @@ def index():
 
 
 # Customer create a new itinerary 
-@app.post("/new_itinerary", methods = ["POST"]) 
+@app.route("/new_itinerary", methods = ["POST"]) 
 def create_itinerary():
     try:
         data = request.get_json()
@@ -45,12 +45,15 @@ def create_itinerary():
         )
 
         # Statement to update itinerary-destination table 
-        for i in len(data['destinations']):
-            cursor.execute (
-                "INSERT INTO itinerary_destination(id, destination_id, itinearary_id VALUES (%s, %s , %s)",
-                (f"{unique_id}_{i}", data['destinations'][i], data['itinerary_id'])
-            
-        )
+        if len(data['destinations']) == 0:
+            pass
+        else:
+            for i in len(data['destinations']):
+                cursor.execute (
+                    "INSERT INTO itinerary_destination(id, destination_id, itinearary_id VALUES (%s, %s , %s)",
+                    (f"{unique_id}_{i}", data['destinations'][i-1], data['itinerary_id'])
+                
+            )
         mysql.connection.commit()
         cursor.close()
 
@@ -60,7 +63,7 @@ def create_itinerary():
 
 # Customer updates the itinerary
 
-@app.route('edit_itinerary', methods=['POST'])
+@app.route('/edit_itinerary', methods=['POST'])
 def edit_itinerary():
     try:
         # Update itinerary data
@@ -81,7 +84,7 @@ def edit_itinerary():
         return jsonify({'error': str(e)})
     
 # Customer edits destination which requires updates to both the itinerary and itinerary_destination tables.
-@app.route('edit_itinerary_destination', methods = ['POST'])
+@app.route('/edit_itinerary_destination', methods = ['POST'])
 def edit_itinerary_destination():
     try:
         
@@ -118,8 +121,8 @@ def edit_itinerary_destination():
 
 
 # To delete itinerary
-@app.route('delete_itinerary', methods = ['POST'])
-def edit_itinerary_destination():
+@app.route('/delete_itinerary', methods = ['POST'])
+def delete_itinerary_destination():
     try:
         #update itinerary_destination
         data =  request.get_json()
@@ -142,3 +145,6 @@ def edit_itinerary_destination():
 
     except Exception as e:
         return jsonify({'error': str(e)})
+    
+if __name__ == '__main__':
+    app.run(debug=True)
