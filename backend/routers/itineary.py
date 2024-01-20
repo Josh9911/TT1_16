@@ -138,7 +138,7 @@ def edit_itinerary_destination():
         mysql.connection.commit()
         cursor.close()
 
-        return jsonify({'message': 'Itinerary updated successfully'})
+        return jsonify({'message': 'Itinerary deleted successfully'})
 
     except Exception as e:
         return jsonify({'error': str(e)})
