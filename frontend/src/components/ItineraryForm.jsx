@@ -2,36 +2,37 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-const ItineraryForm = () => {
+const ItineraryForm = ({id}) => {
     const create = true;
-    const [destinations, setDestinations] = useState([{
-        id: 1,
-        name: "Alpha",
-        cost: 200,
-        notes: "Hello"
-    },{
-        id: 2,
-        name: "Beta",
-        cost: 300,
-        notes: "Abc"
-    },{
-        id: 3,
-        name: "Gamma",
-        cost: 100,
-        notes: "Test"
-    }]);
+    const [destinations, setDestinations] = useState([]);
     const [selectedDest, setSelectedDest] = useState([]);
     const [title, setTitle] = useState();
+    const [country, setCountry] = useState(1);
     const [budget, setBudget] = useState();
     const [total, setTotal] = useState(0);
     const [budgetErr, setBudgetErr] = useState(false);
 
     useEffect(() => {
-
+        getAllDestinations();
     }, [])
 
     const getAllDestinations = () => {
-        
+        setDestinations([{
+            id: 1,
+            name: "Alpha",
+            cost: 200,
+            notes: "Hello"
+        },{
+            id: 2,
+            name: "Beta",
+            cost: 300,
+            notes: "Abc"
+        },{
+            id: 3,
+            name: "Gamma",
+            cost: 100,
+            notes: "Test"
+        }])
     }
 
     const setCheckbox = (e) => {
@@ -49,25 +50,52 @@ const ItineraryForm = () => {
         var temp = destinations.filter((destination) => selectedDest.includes('' + destination.id));
         var sum = temp.reduce((partialSum, x) => partialSum + x.cost, 0);
         setTotal(sum);
+        if(sum > budget) {
+            setBudgetErr(true);
+        }
+        else {
+            setBudgetErr(false);
+        }
     }
 
     const submitFunc = () => {
+        var tempDest = selectedDest;
+        if(id === undefined) {
+            var response = {
+                country_id: country,
+                user_id: 123,
+                budget: budget,
+                title: title,
+                destinations: tempDest
+            }
+        }
+        else {
+            var response = {
+                itinerary_id: id,
+                country_id: country,
+                user_id: 123,
+                budget: budget,
+                title: title,
+                destinations: tempDest
+            }
+        }
 
+        console.log(response);
     }
     
     return (
-        <Modal show={true}>
+        <div className='container'>
             <form id='itiForm'>
-                <Modal.Header closeButton>
-                    <Modal.Title>{create ? "Create itinerary" : "Edit itinerary"}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <div className='row'>
+                    <div className='col'>{create ? "Create itinerary" : "Edit itinerary"}</div>
+                </div>
+                <div className='row'>
                     <div className='row mb-3'>
                         <div className='col'>
                             <label htmlFor='titleInput'>Title: </label>
                         </div>
                         <div className='col'>
-                            <input type='text' />
+                            <input type='text' onChange={(e) => setTitle(e.target.value)}/>
                         </div>
                     </div>
                     <div className='row mb-3'>
@@ -90,7 +118,7 @@ const ItineraryForm = () => {
                     </div>
                     <div className='row mb-3'>
                         <div className='col'>
-                            {(budget!== null && total > budget) && <p style={{color: 'red'}}>Budget exceeded!</p>}
+                            {budgetErr && <p style={{color: 'red'}}>Budget exceeded!</p>}
                         </div>
                     </div>
                     <div className='row mb-3'>
@@ -102,42 +130,51 @@ const ItineraryForm = () => {
                             </label>
                         </div>
                     </div>
-                    <table className="table">
-                    <thead>
-                        <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Cost</th>
-                        <th scope="col">Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            destinations.map((destination) => (
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" value={destination.id} onClick={(e) => setCheckbox(e)}/>
-                                    </td>
-                                    <td>
-                                        {destination.name}
-                                    </td>
-                                    <td>
-                                        {destination.cost}
-                                    </td>
-                                    <td>
-                                        {destination.notes}
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                    </table>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary">Submit</Button>
-                </Modal.Footer>
+                    <div className='row'>
+                        <div className='col-2'>
+
+                        </div>
+                        <div className='col'>
+                        <table className="table">
+                        <thead>
+                            <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Cost</th>
+                            <th scope="col">Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                destinations.map((destination, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                            <input type="checkbox" value={destination.id} onClick={(e) => setCheckbox(e)}/>
+                                        </td>
+                                        <td>
+                                            {destination.name}
+                                        </td>
+                                        <td>
+                                            {destination.cost}
+                                        </td>
+                                        <td>
+                                            {destination.notes}
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+                <div className='row'>
+                    <div className='col'>
+                        <Button variant="primary" onClick={submitFunc}>Submit</Button>
+                    </div>
+                </div>
             </form>
-        </Modal>
+        </div>
   )
 }
 
