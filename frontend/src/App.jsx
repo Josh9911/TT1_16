@@ -1,4 +1,7 @@
 import './App.css'
+import ItineraryForm from './components/ItineraryForm'
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Dashboard from "./components/Dashboard.jsx"
 import Destinations from './components/Destinations.jsx';
@@ -15,7 +18,8 @@ function App() {
                 <Route path='/home'  element={<Dashboard />}/>
                 <Route path='/destinations' element={<Destinations />}/>
                 <Route path='/login' element={<Login />}/>
-                
+                <Route path='/home' element={<Dashboard />}/>
+                <Route path='/createiti' element={<ItineraryForm/>}/>
             </Routes>
         </BrowserRouter>
     </>
