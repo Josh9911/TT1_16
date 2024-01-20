@@ -19,6 +19,7 @@ function App() {
                 <Route path='/destinations' element={<Destinations />}/>
                 <Route path='/login' element={<Login />}/>
                 <Route path='/home' element={<Dashboard />}/>
+                <Route path='/createiti' element={<ItineraryForm/>}/>
             </Routes>
         </BrowserRouter>
     </>
