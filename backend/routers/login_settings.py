@@ -1,0 +1,5 @@
+MYSQL_USER = "root"
+MYSQL_PASSWORD = "1998durby"
+MYSQL_HOST = "127.0.0.1"
+MYSQL_DB = "techtrek24"
+JWT_SECRETKEY = "004f2af45d3a4e161a7dd2d17fdae47f"
