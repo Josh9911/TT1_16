@@ -10,6 +10,7 @@ const Dashboard = () => {
 
     const data = [
         { itineraryTitle: "Title1", budget: 500, country: "Singapore", listOfDestinations: "a,b" },
+        { itineraryTitle: "Title1", budget: 500, country: "Singapore", listOfDestinations: "a,b" },
     ]
 
 
@@ -25,6 +26,8 @@ const Dashboard = () => {
                             <TableCell>Budget</TableCell>
                             <TableCell>Country</TableCell>
                             <TableCell>List of Destinations</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -35,6 +38,8 @@ const Dashboard = () => {
                                     <TableCell>{val.budget}</TableCell>
                                     <TableCell>{val.country}</TableCell>
                                     <TableCell>{val.listOfDestinations}</TableCell>
+                                    <TableCell><button>Edit</button></TableCell>
+                                    <TableCell><button>Delete</button></TableCell>
                                 </TableRow>
                             )
                         })}
