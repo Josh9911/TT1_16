@@ -16,12 +16,14 @@ const Dashboard = () => {
             "budget": 500.0,
             "country": "Singapore",
             "destinations": "Marina Bay Sands, Gardens by the Bay, Sentosa Island",
+            "itinerary_id": 1,
             "itinerary_title": "Sightseeing in Singapore"
         },
         {
             "budget": 800.0,
             "country": "Singapore",
             "destinations": "Universal Studios Singapore, Singapore Zoo",
+            "itinerary_id": 2,
             "itinerary_title": "Singapore Adventure"
         }
     ]
