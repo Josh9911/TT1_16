@@ -54,5 +54,37 @@ def getDest():
         country_dest[country_data[0]].append(dest_details)
     return country_dest
 
+@app.route('/postDest', methods=['POST'])
+def postDest():
+    cursor = mysql.connection.cursor()
+
+    #calculate new id for destination
+    cursor.execute('''SELECT MAX(id) FROM destination ''')
+    prev_id = cursor.fetchall()
+    new_id = prev_id[0][0] + 1
+
+    #check if country exists
+    cursor.execute('''SELECT COUNT(id) FROM country WHERE name = %s''',(request.json['country'],))
+    num_countries = cursor.fetchall()[0][0]
+
+    print(num_countries)
+    if num_countries == 0:
+        #create new country if if not exist
+        cursor.execute('''SELECT MAX(id) FROM country''')
+        new_country_id = cursor.fetchall()[0][0] + 1
+        print(new_country_id)
+        cursor.execute('''INSERT INTO country (id, name) VALUES (%s, %s)''', (new_country_id, request.json['country']))
+        cursor.execute('''INSERT INTO destination (id, country_id, cost, name, notes) 
+                   VALUES (%s, %s, %s, %s, %s)''', (new_id, new_country_id, request.json['cost'], request.json['location'], request.json['notes']))
+    else:
+        cursor.execute('''SELECT id FROM country WHERE name = %s''',(request.json['country'],))
+        country_id = cursor.fetchall()[0][0]
+        cursor.execute('''INSERT INTO destination (id, country_id, cost, name, notes) 
+                   VALUES (%s, %s, %s, %s, %s)''', (new_id, country_id, request.json['cost'], request.json['location'], request.json['notes']))
+    mysql.connection.commit
+    cursor.close()
+    return "200"
+
+
 if __name__ == '__main__':
     app.run(debug=True)
