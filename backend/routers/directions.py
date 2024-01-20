@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_mysqldb import MySQL
 import json
  
@@ -18,8 +18,13 @@ def base():
 
 @app.route('/getDestNames', methods=['GET'])
 def getDestNames():
+    itinerary_id = request.args['id']
     cursor = mysql.connection.cursor()
-    cursor.execute('''SELECT name FROM destination ''')
+    cursor.execute('''SELECT destination.name 
+                   FROM destination
+                   RIGHT JOIN itinerary_destination 
+                   ON itinerary_destination.destination_id = destination.id 
+                   WHERE itinerary_destination.itinerary_id = %s''', itinerary_id)
     data = cursor.fetchall()
     cursor.close()
 
@@ -35,7 +40,7 @@ def getDestNames():
 def getDest():
     cursor = mysql.connection.cursor()
     cursor.execute('''
-                   SELECT country.name, destination.cost, destination.name, destination.notes 
+                   SELECT country.name, destination.cost, destination.name, destination.notes, destination.id 
                    FROM destination
                    LEFT JOIN country ON destination.country_id = country.id
                    ORDER BY country.id ''')
@@ -45,13 +50,8 @@ def getDest():
     for country_data in data:
         if country_data[0] not in country_dest.keys():
             country_dest[country_data[0]] = []
-        dest_details = {"cost": country_data[1], "name": country_data[2], "notes": country_data[3]}
+        dest_details = {"cost": country_data[1], "name": country_data[2], "notes": country_data[3], "id": country_data[4]}
         country_dest[country_data[0]].append(dest_details)
-
-    # json_data = []
-    # for result in data:
-    #     json_data.append(result)
-    # json_result = json.dumps(json_data)
     return country_dest
 
 if __name__ == '__main__':
