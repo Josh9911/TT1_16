@@ -33,8 +33,10 @@ const Destinations = () => {
         ]
     }
     const [open, setOpen] = useState(false);
+    const [updateOpen, setUpdateOpen] = useState(false);
     const [destinations, setDestinations] = useState(destinationsData);
     const [newDestination, setNewDestination] = useState({ country: '', location: '', cost: '', notes: '' });
+    const [updatedDestination, setUpdatedDestination] = useState({ country: '', location: '', cost: '', notes: '' });
 
     const handleOpen = () => {
         setOpen(true);
@@ -58,6 +60,33 @@ const Destinations = () => {
             ]
         }));
         handleClose();
+    };
+
+    function openUpdateModal(destination) {
+        setUpdateOpen(true);
+        setUpdatedDestination(destination)
+    }
+
+    const handleUpdate = (e) => {
+        setUpdatedDestination({ ...updatedDestination, [e.target.name]: e.target.value });
+    };
+
+    function closeUpdateModal() {
+        setUpdateOpen(false);
+    }
+
+    const submitUpdate = (e) => {
+        e.preventDefault();
+        console.log(`Updating destination: ${JSON.stringify(updatedDestination)}`);
+        setDestinations(prevData => {
+            let newData = { ...prevData };
+            for (let country in newData) {
+                newData[country] = newData[country].map(dest => 
+                    dest.id === updatedDestination.id ? updatedDestination : dest
+                );
+            }
+            return newData;
+        });
     };
 
     const handleDelete = (id) => {
@@ -96,7 +125,7 @@ const Destinations = () => {
                                     <TableCell>{destination.cost}</TableCell>
                                     <TableCell>{destination.notes}</TableCell>
                                     <TableCell style={{ "display": "flex" }}>
-                                        <Button variant='contained' style={{ "marginRight": "2px" }}>
+                                        <Button variant='contained' style={{ "marginRight": "2px" }} onClick={() => openUpdateModal( destination)}>
                                             Update
                                         </Button>
                                         <Button variant='contained' color='error' onClick={() => handleDelete(destination.id)}>
@@ -165,6 +194,54 @@ const Destinations = () => {
                         />
                         <Button type="submit" variant="contained" color="primary" fullWidth>
                             Add Destination
+                        </Button>
+                    </form>
+                </Box>
+            </Modal>
+            <Modal open={updateOpen} onClose={closeUpdateModal}>
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    <form onSubmit={submitUpdate}>
+                        <TextField
+                            name="location"
+                            label="Destination"
+                            value={updatedDestination.location}
+                            onChange={handleUpdate}
+                            fullWidth
+                            required
+                            margin='normal'
+                        />
+                        <TextField
+                            name="cost"
+                            label="Cost"
+                            value={updatedDestination.cost}
+                            onChange={handleUpdate}
+                            fullWidth
+                            required
+                            margin='normal'
+                        />
+                        <TextField
+                            name="notes"
+                            label="Notes"
+                            value={updatedDestination.notes}
+                            onChange={handleUpdate}
+                            fullWidth
+                            required
+                            margin='normal'
+                            placeholder="Enter destination notes here"
+                            multiline
+                            rows={5}
+                        />
+                        <Button type="submit" variant="contained" color="primary" fullWidth>
+                            Update Destination
                         </Button>
                     </form>
                 </Box>
