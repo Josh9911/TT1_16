@@ -9,11 +9,20 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
+import {useNavigate} from "react-router-dom";
 
 const drawerWidth = 240;
 
-export default function SideBar() {
+const SideBar = () => {
 
+    let navigate = useNavigate();
+    const handleChangeDestination = () => {
+        navigate('/destinations');
+    }
+
+    const handleChangeItineraries = () => {
+        navigate('/home');
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -44,10 +53,10 @@ export default function SideBar() {
                 <Divider />
                 <List>
                     <ListItem>
-                        <Button>Itineraries</Button>
+                        <Button onClick={handleChangeItineraries}>Itineraries</Button>
                 </ListItem>
                 <ListItem>
-                    <Button>Destinations</Button></ListItem>
+                    <Button onClick={handleChangeDestination}>Destinations</Button></ListItem>
             </List>
             <Divider/>
         </Drawer>
@@ -55,3 +64,5 @@ export default function SideBar() {
 )
     ;
 }
+
+export default SideBar

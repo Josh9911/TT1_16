@@ -9,8 +9,8 @@ function App() {
 
   return (
     <>
-        <SideBar/>
         <BrowserRouter>
+            <SideBar/>
             <Routes>
                 <Route path='/home'  element={<Dashboard />}/>
                 <Route path='/destinations' element={<Destinations />}/>
