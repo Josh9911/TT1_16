@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   //store the user input
   const [formData, setFormData] = useState({
-    userID: '',
-    first_name: '',
-    last_name: '',
-    username: '',
-    password: '',
+    userID: "",
+    first_name: "",
+    last_name: "",
+    username: "",
+    password: "",
   });
-
 
   //update state when input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
-      ...prevFormData, 
+      ...prevFormData,
       [name]: value,
     }));
   };
@@ -26,17 +27,22 @@ const Login = () => {
 
     try {
       //API
-      const response = await axios.post('API', formData);
+
+      console.log("formdata", formData);
+      const response = await axios.post(
+        "http://127.0.0.1:5000/login",
+        formData
+      );
 
       //returns ID and token
       const { id, token } = response.data;
-      console.log('Authentication successful! ID:', id, ' Token:', token);
+      console.log("Authentication successful! ID:", id, " Token:", token);
 
+      navigate("/home");
     } catch (error) {
-      console.error('Authentication failed!', error.message);
+      console.error("Authentication failed!", error.message);
     }
   };
-
 
   return (
     <div>
@@ -67,6 +73,5 @@ const Login = () => {
     </div>
   );
 };
-
 
 export default Login;
