@@ -81,10 +81,27 @@ def postDest():
         country_id = cursor.fetchall()[0][0]
         cursor.execute('''INSERT INTO destination (id, country_id, cost, name, notes) 
                    VALUES (%s, %s, %s, %s, %s)''', (new_id, country_id, request.json['cost'], request.json['location'], request.json['notes']))
-    mysql.connection.commit
+    mysql.connection.commit()
     cursor.close()
     return "200"
 
+@app.route('/editDest', methods=['POST'])
+def editDest():
+    cursor = mysql.connection.cursor()
+    cursor.execute('''UPDATE destination 
+                   SET cost = %s, name = %s, notes = %s 
+                   WHERE id = %s''', (request.json['cost'], request.json['location'], request.json['notes'], request.json['id'],))
+    mysql.connection.commit()
+    cursor.close()
+    return "200"
+
+@app.route('/deleteDest', methods=['DELETE'])
+def deleteDest():
+    cursor = mysql.connection.cursor()
+    cursor.execute('''DELETE FROM destination WHERE id = %s''', (request.json['id'],))
+    mysql.connection.commit()
+    cursor.close()
+    return "200"
 
 if __name__ == '__main__':
     app.run(debug=True)
