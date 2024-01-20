@@ -111,6 +111,7 @@ const Destinations = () => {
             }
             return newData;
         });
+        axios.delete('http://localhost:5000/deleteDest', id)
     };
 
     return (
