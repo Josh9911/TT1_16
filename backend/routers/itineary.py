@@ -1,60 +1,50 @@
-from this import d
-from ... import models, schemas, utils, oauth2
-from fastapi import Body, FastAPI, Response, status, HTTPException, Depends, APIRouter
-from ..database import get_db
-from sqlalchemy.orm import Session
-from typing import Optional, List
-from sqlalchemy import func
+from flask import Flask, jsonify, request, render_template
+from flask_mysqldb import MySQL
 
-router = APIRouter(
-    prefix="/itineary",
-    tags=['itineary']
-)
+app = Flask(__name__)
 
-# Normal customer create a new itineary 
-@router.post("/new_itineary", status_code= status.HTTP_201_CREATED, response_model=schemas.LoansResponse) 
-def create_loan(loan: schemas.LoansCreate, current_user: schemas.Customer = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
-    # **<classname>.dict will unpack all the contents of the json and put it into our model
-    if current_user["role"]=="user":
-        nloan = loan.dict()
-        nloan["customer_id"]=current_user["id"]
-        new_loan = models.Loan(**nloan) 
-        db.add(new_loan)
-        db.commit()
-        db.refresh(new_loan) #similar to RETURNINING in normal SQL
-        return new_loan
-    else:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                        detail=f"Only Normal users can use this")
+# Replace 'user', 'password', 'host', 'database' with your MySQL connection details
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'popcorn2'
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_DB'] = 'techtrek24'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-# Normal customer gets all their loans
-@router.get("/myloans", response_model=List[schemas.LoansResponse]) 
-def get_all_loans_of_user(current_user: schemas.Customer = Depends(oauth2.get_current_user), db: Session = Depends(get_db), limit:int = 10, skip:int = 0):
-    if current_user["role"]=="user":
-        loans = db.query(models.Loan).filter(models.Loan.customer_id == current_user["id"]).limit(limit).offset(skip).all()
-        return loans
-    else:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                        detail=f"Only Normal users can use this")
+mysql = MySQL(app)
 
-# Admin user gets ALL loans
-@router.get("/all_loans", response_model=List[schemas.LoansResponse]) 
-def get_all_loans(current_user: schemas.Customer = Depends(oauth2.get_current_user), db: Session = Depends(get_db), limit:int = 10, skip:int = 0):
-    
-    if current_user["role"]=="admin":
-        loans = db.query(models.Loan).limit(limit).offset(skip).all()
-        return loans
-    else:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                        detail=f"Only Admin users can use this")
+# Customer displays all itineraries
 
-# Admin user gets ALL loans of a customer
-@router.get("/all_loans/customerid={customer_id}", response_model=List[schemas.LoansResponse]) 
-def get_all_loans(customer_id:int, current_user: schemas.Customer = Depends(oauth2.get_current_user), db: Session = Depends(get_db), limit:int = 10, skip:int = 0):
-    
-    if current_user["role"]=="admin":
-        loans = db.query(models.Loan).filter(models.Loan.customer_id==customer_id).limit(limit).offset(skip).all()
-        return loans
-    else:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                        detail=f"Only Admin users can use this")
+@app.route('/get_itinerary', methods = ['POST'])
+def index():
+    try:   
+        data = request.get_json()
+
+
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM itinerary WHERE user_id = %s", data['id'])
+        data = cur.fetchall()
+        cur.close()
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+
+# Customer create a new itineary 
+@app.post("/new_itineary", methods = ["POST"]) 
+def create_itineary():
+    try:
+        data = request.get_json()
+
+        cursor = mysql.connection.cursor()
+        cursor.execute(
+            "INSERT INTO itinerary (id, country_id, user_id, budget, title) VALUES (%s, %s, %s, %s, %s)",
+            (data['id'], data['country_id'], data['user_id'], data['budget'], data['title'])
+        )
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({'message': 'Itinerary added successfully'})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+# Customer updates the itineary

@@ -12,3 +12,5 @@ pymongo
 six
 Werkzeug
 WTForms==2.3.3
+fastapi 
+flask_mysqldb
