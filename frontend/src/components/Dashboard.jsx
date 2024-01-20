@@ -13,6 +13,13 @@ const Dashboard = () => {
         { itineraryTitle: "Title1", budget: 500, country: "Singapore", listOfDestinations: "a,b" },
     ]
 
+    const editItinerary = () => {
+      console.log('test')
+    }
+
+    const removeItinerary = () => {
+        console.log('test')
+    }
 
     return (
         <div>
@@ -38,8 +45,8 @@ const Dashboard = () => {
                                     <TableCell>{val.budget}</TableCell>
                                     <TableCell>{val.country}</TableCell>
                                     <TableCell>{val.listOfDestinations}</TableCell>
-                                    <TableCell><button>Edit</button></TableCell>
-                                    <TableCell><button>Delete</button></TableCell>
+                                    <TableCell><button onClick={editItinerary}>Edit</button></TableCell>
+                                    <TableCell><button onClick={removeItinerary}>Delete</button></TableCell>
                                 </TableRow>
                             )
                         })}
