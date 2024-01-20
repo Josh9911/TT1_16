@@ -97,6 +97,7 @@ const Destinations = () => {
             }
             return newData;
         });
+        axios.post('http://localhost:5000/editDest', updatedDestination)
     };
 
     const handleDelete = (id) => {
