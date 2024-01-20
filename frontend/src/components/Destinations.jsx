@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Table,
     TableBody,
@@ -12,8 +12,17 @@ import {
     TextField,
     Box
 } from '@mui/material';
+import axios from 'axios'
 
 const Destinations = () => {
+    useEffect(() => {
+        axios.get('http://localhost:5000/getDest')
+        .then(response => {
+            console.log(response)
+            setDestinations(response.data)
+        })
+    }, [])
+
     const destinationsData = {
         "Singapore": [
             {
