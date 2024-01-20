@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Login = () => {
   //store the user input
@@ -15,37 +16,42 @@ const Login = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
-      ...prevformData,
+      ...prevFormData, 
       [name]: value,
     }));
   };
 
-  //form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitted:', formData);
+
+    try {
+      //API
+      const response = await axios.post('API', formData);
+
+      //returns ID and token
+      const { id, token } = response.data;
+      console.log('Authentication successful! ID:', id, ' Token:', token);
+
+    } catch (error) {
+      console.error('Authentication failed!', error.message);
+    }
   };
 
 
   return (
     <div>
       <h2>Login Page</h2>
-      {/* Login Form */}
       <form onSubmit={handleSubmit}>
-
-        {/* User Name */}
         <label>
-            Username:
-            <input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                />
+          Username:
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+          />
         </label>
-        <br/>
-
-        {/* Password Input */}
+        <br />
         <label>
           Password:
           <input
@@ -56,8 +62,6 @@ const Login = () => {
           />
         </label>
         <br />
-
-        {/* Submit Button */}
         <button type="submit">Login</button>
       </form>
     </div>
