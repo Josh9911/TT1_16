@@ -29,13 +29,17 @@ const Dashboard = () => {
     ]
 
     let navigate = useNavigate();
-    const editItinerary = () => {
+    let id= 0;
+    const editItinerary = (val) => {
+        id = val;
+        console.log(val);
         navigate('/destinations');
     }
 
-    const removeItinerary = () => {
+    const removeItinerary = (val) => {
         //obtain Itinerary ID
-        console.log('test')
+        id = val;
+        console.log(val);
     }
 
     return (
@@ -63,8 +67,8 @@ const Dashboard = () => {
                                     <TableCell>{val.budget}</TableCell>
                                     <TableCell>{val.country}</TableCell>
                                     <TableCell >{val.destinations}</TableCell>
-                                    <TableCell><Button variant="contained" onClick={editItinerary}>Edit</Button></TableCell>
-                                    <TableCell><Button variant="contained" onClick={removeItinerary}>Delete</Button></TableCell>
+                                    <TableCell><Button variant="contained" onClick={(e) => editItinerary(val.itinerary_id)}>Edit</Button></TableCell>
+                                    <TableCell><Button variant="contained" onClick={(e) => removeItinerary(val.itinerary_id)}>Delete</Button></TableCell>
                                 </TableRow>
                             )
                         })}
